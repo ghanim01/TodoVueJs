@@ -1,0 +1,32 @@
+{
+  "name": "todolist_vuetify",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "vite preview",
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mdi/font": "5.9.55",
+    "@vueuse/rxjs": "^9.4.0",
+    "dexie": "^3.2.2",
+    "idb": "^7.1.0",
+    "moment": "^2.29.4",
+    "pinia": "^2.0.23",
+    "roboto-fontface": "*",
+    "rxjs": "^7.5.7",
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.6",
+    "vuetify": "npm:@vuetify/nightly@next",
+    "webfontloader": "^1.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.1.0",
+    "sass": "^1.55.0",
+    "vite": "^3.1.0",
+    "vite-plugin-vuetify": "^1.0.0"
+  },
+  "type": "module"
+}
