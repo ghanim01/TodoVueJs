@@ -8,7 +8,7 @@ import deletedComponent from "../components/todoComponents/deletedComponent.vue"
 const routes = [
   {
     path: "/",
-    redirect: "todolist",
+    redirect: "/todolist",
   },
   {
     path: "",
