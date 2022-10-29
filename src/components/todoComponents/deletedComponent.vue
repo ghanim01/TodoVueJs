@@ -158,6 +158,5 @@ export default {
 <style scoped>
 .bgCard {
   background-color: #beb4b413;
-  display: grid !important;
 }
 </style>

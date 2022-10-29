@@ -48,13 +48,13 @@ import { useTodoStore } from "../../stores/todoStore";
 export default {
   setup() {
     const datastore = useTodoStore();
-
-    const createdList = ref([]);
+    const createdList = ref({});
     onMounted(async () => {
       await datastore.getCreatedTasks();
       const res = datastore.createdListGetter;
       createdList.value = res;
     });
+    console.log(createdList);
     onUpdated(() => {
       datastore.getCreatedTasks();
     });
@@ -84,6 +84,5 @@ export default {
 <style scoped>
 .bgCard {
   background-color: #acd9ff15;
-  display: grid !important;
 }
 </style>
