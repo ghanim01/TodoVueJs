@@ -1,69 +1,56 @@
 <template>
-  <div class="d-flex justify-center align-center flex-wrap pa-4">
-    <v-timeline
-      align="center"
-      line-color="blue-lighten-4"
-      truncate-line="both"
-      theme="dark"
+  <div class="d-flex justify-start align-center flex-wrap pa-4">
+    <v-card
+      rounded
+      variant="elevated"
+      width="344"
+      max-width="344"
+      density="compact"
+      v-for="item in createdList"
+      :width="lgAndUp ? '344px' : 'auto'"
+      class="elevation-1 ma-2 align-center justify-start bgCard"
     >
-      <v-timeline-item
-        v-for="item in createdList"
-        :key="item.id"
-        dot-color="blue-darken-1"
-        size="large"
+      <v-card-title
+        class="text-subtitle-1 font-weight-medium text-blue-darken-4"
       >
-        <template v-slot:opposite>
-          <div
-            class="pt-1 headline font-weight-medium text-blue-darken-2"
-            v-text="convertdate(item.time) + ' - ' + convertime(item.time)"
-          ></div>
-        </template>
-        <div>
-          <v-card
-            variant="elevated"
-            density="compact"
-            rounded
-            :width="lgAndUp ? '344px' : 'auto'"
-            class="elevation-1 ma-2 align-center justify-start bgCard"
+        {{ item.title.toLocaleUpperCase() }}
+      </v-card-title>
+      <v-card-subtitle
+        class="pt-1 headline font-weight-medium text-blue-darken-2 mb-2"
+      >
+        {{ convertdate(item.time) + " - " + convertime(item.time) }}
+      </v-card-subtitle>
+      <v-img
+        height="auto"
+        src="../../assets/todoBg.svg"
+        width="344px"
+        cover
+        class="text-white"
+      >
+        <v-layout full-height class="align-center">
+          <v-card-text
+            class="d-flex text-subtitle-2 font-weight-medium flex-wrap"
           >
-            <v-card-title
-              class="text-subtitle-1 font-weight-medium text-blue-darken-4"
-            >
-              {{ item.title.toLocaleUpperCase() }}
-            </v-card-title>
-            <v-img
-              height="auto"
-              src="../../assets/todoBg.svg"
-              cover
-              class="text-white"
-            >
-              <v-layout full-height class="align-center">
-                <v-card-text
-                  class="d-flex text-subtitle-2 font-weight-medium flex-wrap"
-                >
-                  {{ item.description }}
-                </v-card-text>
-              </v-layout>
-            </v-img>
-            <v-card-actions class="align-self-center justify-end">
-              <v-btn
-                density="comfortable"
-                color="grey-darken-2"
-                class="me-2"
-                icon="mdi-delete"
-                @click="changeStatus(item, 'deleted')"
-              />
-              <v-btn
-                density="comfortable"
-                color="orange-darken-4"
-                icon="mdi-progress-clock"
-                @click="changeStatus(item, 'inprogress')"
-              />
-            </v-card-actions>
-          </v-card>
-        </div>
-      </v-timeline-item>
-    </v-timeline>
+            {{ item.description }}
+          </v-card-text>
+        </v-layout>
+      </v-img>
+      <v-card-actions class="align-self-center justify-end">
+        <v-btn
+          density="comfortable"
+          color="grey-darken-2"
+          class="me-2"
+          icon="mdi-delete"
+          @click="changeStatus(item, 'deleted')"
+        />
+        <v-btn
+          density="comfortable"
+          color="orange-darken-4"
+          icon="mdi-progress-clock"
+          @click="changeStatus(item, 'inprogress')"
+        />
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 <script>

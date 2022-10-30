@@ -208,6 +208,48 @@
         </div>
       </v-timeline-item>
     </v-timeline>
+    <v-dialog
+      transition="dialog-bottom-transition"
+      persistent
+      width="auto"
+      class="align-center"
+      :min-width="mdAndDown ? 'auto' : '600px'"
+      ref="vdialog"
+      v-model="vdialog"
+    >
+      <v-card variant="elevated" rounded>
+        <v-toolbar
+          color="red-darken-4"
+          density="comfortable"
+          class="align-center"
+        >
+          <v-toolbar-title>Delete task forever Task</v-toolbar-title>
+        </v-toolbar>
+        <v-card-title
+          primary-title
+          :class="mdAndDown ? 'text-subtitle-2' : 'text-h6'"
+          class="py-8 text-center"
+        >
+          Are you sure you want to delete this task for ever?
+        </v-card-title>
+        <v-card-actions class="justify-center mb-2">
+          <v-btn
+            class="px-10 mx-2"
+            variant="text"
+            color="red-darken-3"
+            @click="deleteItem()"
+            >Yes</v-btn
+          >
+          <v-btn
+            class="px-10 mx-2"
+            variant="text"
+            color="grey-darken-3"
+            @click="this.vdialog = false"
+            >No</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -234,7 +276,9 @@ export default {
     return { allTasksList, datastore, xs, mdAndUp, mdAndDown, lgAndUp };
   },
   name: "todoComponent",
-  data: () => ({}),
+  data: () => ({
+    vdialog: false,
+  }),
   methods: {
     convertdate(timestap) {
       var date = new Date(timestap);
@@ -248,6 +292,10 @@ export default {
     },
     deleteItem(item) {
       this.datastore.deleteTask(item);
+    },
+    vdialogToggle(item) {
+      this.selectedItem = item;
+      this.vdialog = true;
     },
     changeStatus(item, newStat) {
       this.datastore.modifyStatus(item, newStat);
@@ -304,15 +352,15 @@ export default {
 </script>
 <style scoped>
 .bgCardCreated {
-  background-color: #acd9ff15;
+  background-color: #ffffff;
 }
 .bgCardInprogress {
-  background-color: #f1dfcf10;
+  background-color: #ffffff;
 }
 .bgCardFinished {
-  background-color: #a5be9f10;
+  background-color: #ffffff;
 }
 .bgCardDeleted {
-  background-color: #beb4b413;
+  background-color: #ffffff;
 }
 </style>

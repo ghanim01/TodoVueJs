@@ -16,6 +16,28 @@
         ><v-icon class="me-2">mdi-access-point</v-icon>Todo
         List</v-app-bar-title
       >
+      <template v-slot:append>
+        <v-menu transition="scale-transition">
+          <template v-slot:activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-dots-vertical"> </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-btn variant="text" flat @click.prevent="changeView('timeline')"
+                >Timeline View</v-btn
+              >
+            </v-list-item>
+            <v-list-item>
+              <v-btn
+                variant="text"
+                flat
+                @click.prevent="changeView('cardsview')"
+                >Cards View</v-btn
+              >
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" theme="dark">
       <v-list color="transparent" v-model="tab">
@@ -141,8 +163,9 @@ export default {
     date: null,
     tab: "tab-2",
     vdialog: false,
+    view: "timeline",
     valid: true,
-    drawer: true,
+    drawer: false,
     taskname: "",
     drawerfun: false,
     newtaskStatus: "",
@@ -158,6 +181,17 @@ export default {
     ],
   }),
   methods: {
+    changeView(view) {
+      if (view == "timeline") {
+        this.drawer = false;
+        this.view = "timeline";
+        this.$router.push("/alternative");
+      } else if (view == "cardsview") {
+        this.drawer = true;
+        this.view = "cardsview";
+        this.$router.push("/");
+      }
+    },
     validate() {
       this.$refs.form.validate();
     },
@@ -193,12 +227,10 @@ export default {
       }
     },
   },
-  watch: {
-    drawerfun() {
-      if (this.lgAndUp) {
-        return (this.drawer = true);
-      }
-    },
+  created() {
+    if (this.lgAndUp && this.view != "timeline") {
+      return (this.drawer = true);
+    }
   },
 };
 </script>

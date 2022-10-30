@@ -17,7 +17,9 @@
     "pinia": "^2.0.23",
     "roboto-fontface": "*",
     "rxjs": "^7.5.7",
+    "update": "^0.4.2",
     "vue": "^3.2.37",
+    "vue-fab": "^2.3.1",
     "vue-router": "^4.1.6",
     "vuetify": "npm:@vuetify/nightly@next",
     "webfontloader": "^1.0.0"
