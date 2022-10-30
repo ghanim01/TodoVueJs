@@ -9,8 +9,12 @@ export const useTodoStore = defineStore("todoStore", {
     inprogessList: [],
     finishedList: [],
     deletedList: [],
+    allTasksList: [],
   }),
   getters: {
+    allListGetter: function (state) {
+      return state.allTasksList;
+    },
     createdListGetter: function (state) {
       return state.createdList;
     },
@@ -27,6 +31,12 @@ export const useTodoStore = defineStore("todoStore", {
   actions: {
     async deleteTask(task) {
       await db.todoTasks.where("id").equals(task.id).delete();
+    },
+    async getAllTasks() {
+      this.createdList = [];
+      await db.todoTasks.toArray().then((result) => {
+        this.allTasksList = result;
+      });
     },
     async getCreatedTasks() {
       this.createdList = [];

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar color="primary" density="comfortable" fixed>
+    <v-app-bar class="text-center" color="primary" density="comfortable" fixed>
       <template v-slot:image>
         <v-img
           gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"
@@ -16,9 +16,8 @@
         ><v-icon class="me-2">mdi-access-point</v-icon>Todo
         List</v-app-bar-title
       >
-      <!-- <template v-slot:append> </template> -->
     </v-app-bar>
-    <v-navigation-drawer class="bg-deep-purple" v-model="drawer">
+    <v-navigation-drawer v-model="drawer" theme="dark">
       <v-list color="transparent" v-model="tab">
         <v-list-item
           ><v-btn
@@ -33,33 +32,33 @@
         </v-list-item>
         <v-divider class="my-5"></v-divider>
       </v-list>
-      <v-list nav>
+      <v-list nav variant="flat">
         <v-list-item
           ripple
-          color="blue-darken-3"
+          active-color="blue-lighten-3"
           prepend-icon="mdi-format-list-checks"
-          title="Todo Tasks"
-          @click.stop="$router.push('/todolist')"
-        ></v-list-item>
-        <v-list-item
-          ripple
-          color="orange-darken-3"
-          prepend-icon="mdi-progress-clock"
-          @click.stop="$router.push('/progresslist')"
-          >In Progress Tasks</v-list-item
+          to="/todolist"
+          >Todo Tasks</v-list-item
         >
         <v-list-item
+          to="/progresslist"
           ripple
-          color="green-darken-3"
+          active-color="orange-lighten-3"
+          prepend-icon="mdi-progress-clock"
+          >In progress Taks</v-list-item
+        >
+        <v-list-item
+          to="/finishedlist"
+          ripple
+          active-color="green-lighten-3"
           prepend-icon="mdi-check-all"
-          @click.stop="$router.push('/finishedlist')"
           >Finished Tasks</v-list-item
         >
         <v-list-item
           ripple
-          color="grey-darken-1"
+          active-color="grey-lighten-3"
           prepend-icon="mdi-trash-can"
-          @click.stop="$router.push('/deletedlist')"
+          to="/deletedlist"
           >Deleted Tasks</v-list-item
         >
       </v-list>
@@ -68,7 +67,7 @@
       transition="dialog-bottom-transition"
       persistent
       width="auto"
-      min-width="600px"
+      :min-width="mdAndDown ? 'auto' : '600px'"
       ref="vdialog"
       v-model="vdialog"
     >
@@ -97,7 +96,7 @@
             label="Task Name"
             placeholder="Enter Task Name"
             required
-            density="comfortable"
+            density="compact"
             variant="outlined"
             class="px-8 pt-8 pb-3"
           ></v-text-field>
@@ -107,6 +106,7 @@
             :rules="taskdetailsrules"
             label="Task Details"
             placeholder="Enter Task Description"
+            density="compact"
             required
             variant="outlined"
             class="px-8 pb-3"
@@ -138,12 +138,13 @@ export default {
     return { todoStore, xs, mdAndUp, mdAndDown, lgAndUp };
   },
   data: () => ({
+    date: null,
     tab: "tab-2",
     vdialog: false,
     valid: true,
     drawer: true,
     taskname: "",
-    drawerfun: null,
+    drawerfun: false,
     newtaskStatus: "",
     tasknameRules: [
       (v) => !!v || "Task Name is required",
@@ -169,15 +170,19 @@ export default {
     },
     open() {
       this.vdialog = true;
+      if (this.mdAndDown) {
+        this.drawer = !this.drawer;
+      }
     },
     addNewTask() {
       try {
         let title = this.taskname;
         let desc = this.taskdetails;
+        let date = new Date();
         let task = {
           title: title.toString(),
           description: desc.toString(),
-          time: Date.now(),
+          time: date,
           status: "created",
         };
         this.todoStore.saveTask(task);

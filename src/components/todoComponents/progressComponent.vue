@@ -8,9 +8,12 @@
       density="compact"
       v-for="item in inprogressList"
       :title="item.title.toLocaleUpperCase()"
-      :subtitle="convertdate(item.time)"
       class="elevation-1 ma-2 align-center justify-start bgCard"
     >
+      <v-card-subtitle class="mb-2">
+        {{ convertdate(item.time) }}<span> - </span>
+        {{ convertime(item.time) }}</v-card-subtitle
+      >
       <v-img
         height="auto"
         src="../../assets/progressBg.svg"
@@ -64,13 +67,14 @@ export default {
   data: () => ({}),
   methods: {
     convertdate(timestap) {
-      var date = new Date(timestap * 1000);
-      var hours = date.getHours();
-      var minutes = "0" + date.getMinutes();
-      var seconds = "0" + date.getSeconds();
-      var formattedTime =
-        hours + ":" + minutes.slice(-2) + ":" + seconds.slice(-2);
-      return date, formattedTime;
+      var date = new Date(timestap);
+      var dd = date.toLocaleDateString("en-US");
+      return dd;
+    },
+    convertime(timestap) {
+      var date = new Date(timestap);
+      var dt = date.toLocaleTimeString("en-US");
+      return dt;
     },
     deleteItem(item) {
       this.datastore.deleteTask(item);
