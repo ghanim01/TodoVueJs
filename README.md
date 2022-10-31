@@ -17,8 +17,6 @@
 
 ###
 
-
-
-<h4 align="left">Vue 3<br>vite<br>Vue Router <br>Pinia <br>Vuetify 3<br>IndexedDB</h4>
+<h4 align="left">Vue 3 + vite<br>Vue Router <br>Pinia <br>Vuetify 3 (Beta)<br>IndexedDB (Dixie JS)<br>LocalStorage (vueuse/core)</h4>
 
 ###

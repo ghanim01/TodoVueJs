@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
+    "@vueuse/core": "^9.4.0",
     "@vueuse/rxjs": "^9.4.0",
     "dexie": "^3.2.2",
     "idb": "^7.1.0",
