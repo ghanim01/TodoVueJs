@@ -367,7 +367,7 @@ export default {
     setTimeout(() => {
       this.gtasks = [...this.datastore.allTasksList];
       this.isLoading = false;
-    }, 500);
+    }, 200);
     this.$watch(
       () => {
         return [...this.datastore.allTasksList];
@@ -378,17 +378,16 @@ export default {
           setTimeout(() => {
             this.datastore.getAllTasks();
             this.isLoading = false;
-          }, 500);
-        } else if (newVal != preVal) {
+          }, 200);
+        } else {
           this.isLoading = true;
           setTimeout(() => {
             this.gtasks = [...newVal];
             this.isLoading = false;
-            console.log("newVal: --> " + newVal);
-          }, 500);
+          }, 200);
         }
       },
-      { immediate: true, deep: true }
+      { immediate: true, deep: false }
     );
   },
 };
