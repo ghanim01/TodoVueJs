@@ -8,8 +8,9 @@
       </template>
       <template v-slot:prepend v-if="mdAndDown">
         <v-app-bar-nav-icon
+          v-if="view == 'cardsview'"
           variant="text"
-          @click.stop="drawer = !drawer"
+          @click.stop="this.viewStore.changeDrawer(!drawer)"
         ></v-app-bar-nav-icon>
       </template>
       <v-app-bar-title
@@ -234,21 +235,35 @@ export default {
       }
     },
     changeView(xview) {
-      if (xview == "timeline") {
-        this.viewStore.changeDrawer(false);
-        this.viewStore.changeDefaultView(xview);
-        this.viewStore.changeFab(true);
-        this.$router.push("/alternative");
-      } else if (xview == "cardsview") {
-        this.viewStore.changeDrawer(true);
-        this.viewStore.changeDefaultView(xview);
-        this.viewStore.changeFab(false);
-        this.$router.push("/");
+      if (this.lgAndUp) {
+        if (xview == "timeline") {
+          this.viewStore.changeDrawer(false);
+          this.viewStore.changeDefaultView(xview);
+          this.viewStore.changeFab(true);
+          this.$router.push("/alternative");
+        } else if (xview == "cardsview") {
+          this.viewStore.changeDrawer(true);
+          this.viewStore.changeDefaultView(xview);
+          this.viewStore.changeFab(false);
+          this.$router.push("/");
+        }
+      } else {
+        if (xview == "timeline") {
+          this.viewStore.changeDrawer(false);
+          this.viewStore.changeDefaultView(xview);
+          this.viewStore.changeFab(true);
+          this.$router.push("/alternative");
+        } else if (xview == "cardsview") {
+          this.viewStore.changeDrawer(false);
+          this.viewStore.changeDefaultView(xview);
+          this.viewStore.changeFab(false);
+          this.$router.push("/");
+        }
       }
     },
   },
   created() {
-    if (this.view == null && this.lgAndUp) {
+    if (this.view == (null || undefined) && this.lgAndUp) {
       this.viewStore.changeDrawer(false);
       this.viewStore.changeDefaultView("timeline");
       this.viewStore.changeFab(true);
@@ -262,9 +277,9 @@ export default {
       this.viewStore.changeFab(false);
       this.$router.push("/");
     } else {
-      this.viewStore.changeDrawer(true);
-      this.viewStore.changeFab(false);
-      this.$router.push("/");
+      this.viewStore.changeDrawer(false);
+      this.viewStore.changeFab(true);
+      this.$router.push("/alternative");
     }
   },
 };

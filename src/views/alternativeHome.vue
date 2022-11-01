@@ -56,20 +56,13 @@
               <v-card-actions class="align-self-center justify-end">
                 <v-btn
                   v-if="item.status == 'deleted'"
-                  color="grey-darken-1"
-                  variant="text"
-                  denisty="compact"
-                  rounded
-                  stacked
-                  size="small"
+                  density="comfortable"
+                  color="grey-darken-2"
                   class="me-2"
-                  append-icon="mdi-delete-forever"
-                  @click="vdialogToggle(item)"
+                  icon="mdi-delete-forever"
+                  v-on:click="showDialog(item)"
                 >
-                  <v-tooltip activator="parent" location="bottom"
-                    >Delete Forever</v-tooltip
-                  ></v-btn
-                >
+                </v-btn>
                 <v-btn
                   v-if="
                     item.status == 'created' ||
@@ -157,14 +150,10 @@
             <v-card-actions class="align-self-center justify-end">
               <v-btn
                 v-if="item.status == 'deleted'"
-                color="grey-darken-1"
-                variant="text"
-                denisty="compact"
-                rounded
-                stacked
-                size="small"
+                density="comfortable"
+                color="grey-darken-2"
                 class="me-2"
-                append-icon="mdi-delete-forever"
+                icon="mdi-delete-forever"
                 @click="vdialogToggle(item)"
               >
                 <v-tooltip activator="parent" location="bottom"
@@ -207,51 +196,51 @@
               />
             </v-card-actions>
           </v-card>
-          <v-dialog
-            transition="dialog-bottom-transition"
-            persistent
-            width="auto"
-            class="align-center"
-            :min-width="mdAndDown ? 'auto' : '600px'"
-            ref="vdialog"
-            v-model="vdialog"
-          >
-            <v-card variant="elevated" rounded>
-              <v-toolbar
-                color="red-darken-4"
-                density="comfortable"
-                class="align-center"
-              >
-                <v-toolbar-title>Delete task forever Task</v-toolbar-title>
-              </v-toolbar>
-              <v-card-title
-                primary-title
-                :class="mdAndDown ? 'text-subtitle-2' : 'text-h6'"
-                class="py-8 text-center"
-              >
-                Are you sure you want to delete this task for ever?
-              </v-card-title>
-              <v-card-actions class="justify-center mb-2">
-                <v-btn
-                  class="px-10 mx-2"
-                  variant="text"
-                  color="red-darken-3"
-                  @click="deleteItem()"
-                  >Yes</v-btn
-                >
-                <v-btn
-                  class="px-10 mx-2"
-                  variant="text"
-                  color="grey-darken-3"
-                  @click="this.vdialog = false"
-                  >No</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </div>
       </v-timeline-item>
     </v-timeline>
+    <v-dialog
+      transition="dialog-bottom-transition"
+      persistent
+      width="auto"
+      class="align-center"
+      :min-width="mdAndDown ? 'auto' : '600px'"
+      ref="vdialog"
+      v-model="xdialog"
+    >
+      <v-card variant="elevated" rounded>
+        <v-toolbar
+          color="red-darken-4"
+          density="comfortable"
+          class="align-center"
+        >
+          <v-toolbar-title>Delete task forever Task</v-toolbar-title>
+        </v-toolbar>
+        <v-card-title
+          primary-title
+          :class="mdAndDown ? 'text-subtitle-2' : 'text-h6'"
+          class="py-8 text-center"
+        >
+          Are you sure you want to delete this task for ever?
+        </v-card-title>
+        <v-card-actions class="justify-center mb-2">
+          <v-btn
+            class="px-10 mx-2"
+            variant="text"
+            color="red-darken-3"
+            @click.once="deleteItem()"
+            >Yes</v-btn
+          >
+          <v-btn
+            class="px-10 mx-2"
+            variant="text"
+            color="grey-darken-3"
+            @click="this.xdialog = false"
+            >No</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <div v-show="isLoading" class="progDiv">
       <v-progress-linear
         class="prog2"
@@ -285,7 +274,7 @@ export default {
   },
   name: "todoComponent",
   data: () => ({
-    vdialog: false,
+    xdialog: false,
     isLoading: false,
     selectedItem: null,
     gtasks: [],
@@ -302,12 +291,13 @@ export default {
       return dt;
     },
     deleteItem() {
+      this.xdialog = false;
       this.datastore.deleteTask(this.selectedItem);
       // this.datastore.getAllTasks();
     },
-    vdialogToggle(item) {
+    showDialog(item) {
       this.selectedItem = item;
-      this.vdialog = true;
+      this.xdialog = true;
     },
     changeStatus(item, newStat) {
       this.datastore.modifyStatus(item, newStat);
