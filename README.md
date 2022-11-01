@@ -1,22 +1,45 @@
-<h2 align="center">To Do Single Web Application</h2>
+# To Do Vue Js (Single Web Application)
 
-###
+![Logo](https://ik.imagekit.io/ghanim01/To_DO_App/maxresdefault_PpLPCtN6o.png?ik-sdk-version=javascript-1.4.3&updatedAt=1667322895757)
 
-<div align="center">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" height="40" width="52" alt="vuejs logo"  />
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" width="52" alt="javascript logo"  />
-</div>
+## Live Demo
 
-###
+http://todo-spa.vercel.app/
 
-<h4 align="left">Live Demo: http://todo-spa.vercel.app/</h4>
+## Development Stack
 
-###
+- [Vue.js 3](https://vuejs.org/guide/introduction.html)
+- [Vite (Frontend Tooling)](https://vitejs.dev/)
+- [Vue Router (The official router for Vue.js)](https://router.vuejs.org/installation.html)
+- [Pinia (Vue Store for State Managment)](https://pinia.vuejs.org/introduction.html)
+- [Vuetify 3.0.0 (UI Library)](https://next.vuetifyjs.com/en/)
+- [IndexedDB (Dixie JS - A Wrapper for IndexedDB)](https://dexie.org/)
+- [LocalStorage (VueUse - Vue Composition Utilities)](https://vueuse.org/)
 
-<h4 align="left">App Built With:</h4>
+## Live Screenshots
 
-###
+![App Screenshot](https://ik.imagekit.io/ghanim01/To_DO_App/todoapp_ao7tu7v8X.gif)
 
-<h4 align="left">Vue 3 + vite<br>Vue Router <br>Pinia <br>Vuetify 3 (Beta)<br>IndexedDB (Dixie JS)<br>LocalStorage (vueuse/core)</h4>
+## Installation
 
-###
+At first install dependencies
+
+```bash
+  npm install
+```
+
+For Development
+
+```bash
+  npm run dev
+```
+
+For Production
+
+```bash
+  npm run build
+```
+
+## Author
+
+- [Ghanim01](https://github.com/ghanim01/)
