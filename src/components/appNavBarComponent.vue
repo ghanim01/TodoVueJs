@@ -48,7 +48,7 @@
             class="mt-2 align-center"
             ripple
             prepend-icon="mdi-numeric-positive-1"
-            @click.stop="open()"
+            @click="open()"
             >Add New Task</v-btn
           >
         </v-list-item>
@@ -151,6 +151,7 @@
   </div>
 </template>
 <script>
+import { computed } from "vue";
 import { useDisplay } from "vuetify";
 import { useTodoStore } from "../stores/todoStore";
 import { useViewStore } from "../stores/viewStore";
@@ -159,8 +160,16 @@ export default {
     const { xs, mdAndUp, mdAndDown, lgAndUp } = useDisplay();
     const viewStore = useViewStore();
     const todoStore = useTodoStore();
+    let drawer = computed(() => {
+      return viewStore.drawerGetter;
+    });
+    let view = computed(() => {
+      return viewStore.defaultViewGetter;
+    });
 
     return {
+      view,
+      drawer,
       viewStore,
       todoStore,
       xs,
@@ -173,9 +182,7 @@ export default {
     date: null,
     tab: "tab-2",
     vdialog: false,
-    view: "",
     valid: true,
-    drawer: false,
     taskname: "",
     drawerfun: false,
     newtaskStatus: "",
@@ -219,6 +226,7 @@ export default {
           status: "created",
         };
         this.todoStore.saveTask(task);
+        this.todoStore.getAllTasks();
         this.close();
       } catch (error) {
         this.status = `Failed to add
@@ -227,41 +235,37 @@ export default {
     },
     changeView(xview) {
       if (xview == "timeline") {
-        this.drawer = false;
+        this.viewStore.changeDrawer(false);
         this.viewStore.changeDefaultView(xview);
         this.viewStore.changeFab(true);
         this.$router.push("/alternative");
       } else if (xview == "cardsview") {
-        this.drawer = true;
+        this.viewStore.changeDrawer(true);
         this.viewStore.changeDefaultView(xview);
         this.viewStore.changeFab(false);
         this.$router.push("/");
       }
     },
-    addDefaultView(x) {
-      this.viewStore.changeDefaultView(x);
-    },
   },
   created() {
     if (this.view == null && this.lgAndUp) {
-      this.drawer = false;
+      this.viewStore.changeDrawer(false);
       this.viewStore.changeDefaultView("timeline");
+      this.viewStore.changeFab(true);
       this.$router.push("/alternative");
     } else if (this.view == "timeline" && this.lgAndUp) {
-      this.drawer = false;
+      this.viewStore.changeDrawer(false);
+      this.viewStore.changeFab(true);
       this.$router.push("/alternative");
     } else if (this.view == "cardsview" && this.lgAndUp) {
-      this.drawer = true;
+      this.viewStore.changeDrawer(true);
+      this.viewStore.changeFab(false);
       this.$router.push("/");
     } else {
-      this.drawer = false;
+      this.viewStore.changeDrawer(true);
+      this.viewStore.changeFab(false);
       this.$router.push("/");
     }
-  },
-  computed: {
-    getView() {
-      this.view = this.viewStore.defaultViewGetter;
-    },
   },
 };
 </script>

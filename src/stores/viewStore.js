@@ -5,7 +5,8 @@ export const useViewStore = defineStore({
   id: "viewStore",
   state: () => ({
     view: useStorage("view", ""),
-    fab: useStorage("fab", false),
+    fab: useStorage("fab", null),
+    drawer: useStorage("drawer", null),
   }),
   getters: {
     defaultViewGetter() {
@@ -14,13 +15,19 @@ export const useViewStore = defineStore({
     fabGetter() {
       return this.fab;
     },
+    drawerGetter() {
+      return this.drawer;
+    },
   },
   actions: {
     changeDefaultView(DV) {
       this.view = DV;
     },
     changeFab(x) {
-      this.view = x;
+      this.fab = x;
+    },
+    changeDrawer(x) {
+      this.drawer = x;
     },
   },
 });

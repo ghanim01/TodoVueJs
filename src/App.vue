@@ -31,5 +31,6 @@ export default {
   background-color: rgba(240, 250, 252, 0.418);
   background-image: url("../src/assets/HomeBg.svg");
   background-repeat: repeat;
+  background-attachment: fixed;
 }
 </style>

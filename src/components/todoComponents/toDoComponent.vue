@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { onUpdated, onMounted, ref } from "vue";
+import { computed, onUpdated, onMounted, ref } from "vue";
 import { useTodoStore } from "../../stores/todoStore";
 import { useDisplay } from "vuetify";
 

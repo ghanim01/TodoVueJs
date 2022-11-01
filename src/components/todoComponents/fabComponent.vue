@@ -1,14 +1,16 @@
 <template>
   <div>
-    <v-btn
-      v-model.lazy="fab"
-      ripple
-      size="large"
-      class="fabStyle rotate-center"
-      icon="mdi-plus-thick"
-      color="blue-darken-4"
-      @click.stop="open()"
-    ></v-btn>
+    <Transition>
+      <v-btn
+        v-show="fab"
+        ripple
+        size="large"
+        class="fabStyle rotate-center"
+        icon="mdi-plus-thick"
+        color="blue-darken-4"
+        @click.stop="open()"
+      ></v-btn>
+    </Transition>
     <v-dialog
       transition="dialog-bottom-transition"
       persistent
@@ -34,7 +36,7 @@
           align="center"
           v-model="valid"
           lazy-validation
-          @submit.prevent="addNewTask()"
+          @submit="addNewTask()"
         >
           <v-text-field
             v-model="taskname"
@@ -76,6 +78,7 @@
 </template>
 <script>
 import { useDisplay } from "vuetify";
+import { computed } from "vue";
 import { useTodoStore } from "../../stores/todoStore";
 import { useViewStore } from "../../stores/viewStore";
 
@@ -83,15 +86,19 @@ export default {
   setup() {
     const todoStore = useTodoStore();
     const viewStore = useViewStore();
+    let fab = computed(() => {
+      return viewStore.fabGetter;
+    });
+    let view = computed(() => {
+      return viewStore.defaultViewGetter;
+    });
     const { xs, mdAndUp, mdAndDown, lgAndUp } = useDisplay();
-    return { viewStore, todoStore, xs, mdAndUp, mdAndDown, lgAndUp };
+    return { viewStore, todoStore, xs, mdAndUp, mdAndDown, lgAndUp, fab, view };
   },
   data: () => ({
     date: null,
     vdialog: false,
     valid: true,
-    fab: false,
-    view: "",
     taskname: "",
     newtaskStatus: "",
     tasknameRules: [
@@ -141,30 +148,12 @@ export default {
       }
     },
   },
-  watch: {
-    getV() {
-      this.view = this.viewStore.defaultViewGetter;
-    },
-    getF() {
-      this.view = this.viewStore.fabGetter;
-    },
-  },
-  created() {
-    this.fab = this.viewStore.fabGetter;
-    this.view = this.viewStore.defaultViewGetter;
-  },
-  computed: {
-    getView() {
-      this.view = this.viewStore.defaultViewGetter;
-    },
-    getFAB() {
-      getView = this.viewStore.defaultViewGetter;
-      if (getView == "timeline") {
-        this.viewStore.changeFab(true);
-      } else {
-        this.viewStore.changeFab(false);
-      }
-    },
+  getFAB() {
+    if (getView == "timeline") {
+      this.viewStore.changeFab(true);
+    } else {
+      this.viewStore.changeFab(false);
+    }
   },
 };
 </script>

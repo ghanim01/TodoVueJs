@@ -4,13 +4,16 @@ import { db } from "../api/db";
 // import { useObservable } from "@vueuse/rxjs";
 
 export const useTodoStore = defineStore("todoStore", {
-  state: () => ({
-    createdList: [],
-    inprogessList: [],
-    finishedList: [],
-    deletedList: [],
-    allTasksList: [],
-  }),
+  state: () => {
+    return {
+      createdList: [],
+      inprogessList: [],
+      finishedList: [],
+      deletedList: [],
+      allTasksList: [],
+    };
+  },
+
   getters: {
     allListGetter: function (state) {
       return state.allTasksList;
@@ -30,14 +33,24 @@ export const useTodoStore = defineStore("todoStore", {
   },
   actions: {
     async deleteTask(task) {
-      await db.todoTasks.where("id").equals(task.id).delete();
+      try {
+        await db.todoTasks.where("id").equals(task.id).delete();
+        this.getAllTasks();
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getAllTasks() {
-      this.createdList = [];
-      await db.todoTasks.toArray().then((result) => {
-        this.allTasksList = result;
-      });
+      try {
+        this.allTasksList = [];
+        await db.todoTasks.toArray().then((result) => {
+          this.allTasksList = result;
+        });
+      } catch (e) {
+        console.log(e);
+      }
     },
+
     async getCreatedTasks() {
       this.createdList = [];
       await db.todoTasks
@@ -79,18 +92,28 @@ export const useTodoStore = defineStore("todoStore", {
         });
     },
     async modifyStatus(task, newStatus) {
-      await db.todoTasks
-        .where("id")
-        .equals(task.id)
-        .modify({ status: newStatus });
+      try {
+        await db.todoTasks
+          .where("id")
+          .equals(task.id)
+          .modify({ status: newStatus });
+        this.getAllTasks();
+      } catch (error) {
+        console.log(error);
+      }
     },
     async saveTask(task) {
-      await db.todoTasks.add({
-        title: task.title,
-        description: task.description,
-        time: task.time,
-        status: task.status,
-      });
+      try {
+        await db.todoTasks.add({
+          title: task.title,
+          description: task.description,
+          time: task.time,
+          status: task.status,
+        });
+        this.getAllTasks();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });
