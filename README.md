@@ -18,7 +18,7 @@ http://todo-spa.vercel.app/
 
 ## Live Screenshots
 
-![App Screenshot](https://ik.imagekit.io/ghanim01/To_DO_App/todoapp_ao7tu7v8X.gif)
+![](.//src/assets/todoapp.gif)
 
 ## Installation
 
