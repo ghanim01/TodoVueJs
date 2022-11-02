@@ -8,7 +8,7 @@
       </template>
       <template v-slot:prepend v-if="mdAndDown">
         <v-app-bar-nav-icon
-          v-if="view == 'cardsview'"
+          v-if="view == ('cardsview' || null || undefined) && mdAndDown"
           variant="text"
           @click.stop="this.viewStore.changeDrawer(!drawer)"
         ></v-app-bar-nav-icon>
@@ -184,14 +184,14 @@ export default {
     tab: "tab-2",
     vdialog: false,
     valid: true,
-    taskname: "",
     drawerfun: false,
     newtaskStatus: "",
+    taskname: "",
+    taskdetails: "",
     tasknameRules: [
       (v) => !!v || "Task Name is required",
       (v) => (v && v.length >= 4) || "Task name must more than 4 characters",
     ],
-    taskdetails: "",
     taskdetailsrules: [
       (v) => !!v || "Task Description is required",
       (v) =>
@@ -277,6 +277,7 @@ export default {
       this.viewStore.changeFab(false);
       this.$router.push("/");
     } else {
+      this.viewStore.changeDefaultView("timeline");
       this.viewStore.changeDrawer(false);
       this.viewStore.changeFab(true);
       this.$router.push("/alternative");

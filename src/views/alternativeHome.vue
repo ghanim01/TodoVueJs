@@ -16,9 +16,9 @@
         :dot-color="getColor(item.status)"
         size="large"
       >
-        <template v-slot:opposite>
+        <template v-slot:opposite class="align-center">
           <div
-            class="pt-1 headline font-weight-medium"
+            class="pt-1 headline font-weight-medium dateTimeSty"
             :class="getTextColor(item.status)"
             v-text="convertdate(item.time) + ' - ' + convertime(item.time)"
           ></div>
@@ -154,12 +154,9 @@
                 color="grey-darken-2"
                 class="me-2"
                 icon="mdi-delete-forever"
-                @click="vdialogToggle(item)"
+                v-on:click="showDialog(item)"
               >
-                <v-tooltip activator="parent" location="bottom"
-                  >Delete Forever</v-tooltip
-                ></v-btn
-              >
+              </v-btn>
               <v-btn
                 v-if="
                   item.status == 'created' ||
@@ -257,9 +254,63 @@
       indeterminate
     ></v-progress-circular> -->
     </div>
+    <div ref="addTaskCard" v-show="newTaskCard">
+      <v-card
+        variant="elevated"
+        density="comfortable"
+        rounded
+        class="elevation-2 mx-auto py-2 text-center align-center justify-start addTaskCardClass mt-12"
+        color="#fafafa"
+      >
+        <v-card-text class="text-blue-darken-3 text-h6 font-weight-medium">
+          Start adding your first task
+        </v-card-text>
+        <v-form
+          ref="form"
+          align="center"
+          v-model="valid"
+          lazy-validation
+          @submit="addNewTask()"
+        >
+          <v-text-field
+            v-model="taskname"
+            :rules="tasknameRules"
+            label="Task Name"
+            placeholder="Enter Task Name"
+            required
+            density="compact"
+            variant="outlined"
+            class="px-8 pt-8 pb-3"
+          ></v-text-field>
+
+          <v-textarea
+            v-model="taskdetails"
+            :rules="taskdetailsrules"
+            label="Task Details"
+            placeholder="Enter Task Description"
+            density="compact"
+            required
+            variant="outlined"
+            class="px-8"
+          ></v-textarea>
+          <v-card-actions class="justify-center align-center">
+            <v-btn
+              variant="flat"
+              :disabled="!valid"
+              color="success"
+              prepend-icon="mdi-plus-circle-outline"
+              class="px-5 align-center"
+              type="submit"
+              >Save</v-btn
+            >
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </div>
   </div>
 </template>
 <script>
+import { handleError, onMounted } from "vue";
 import { useTodoStore } from "../stores/todoStore";
 import { useDisplay } from "vuetify";
 import createdBg from "../assets/todoBg.svg";
@@ -274,12 +325,48 @@ export default {
   },
   name: "todoComponent",
   data: () => ({
+    date: null,
+    valid: true,
     xdialog: false,
     isLoading: false,
     selectedItem: null,
+    newTaskCard: false,
     gtasks: [],
+    taskname: "",
+    taskdetails: "",
+    tasknameRules: [
+      (v) => !!v || "Task Name is required",
+      (v) => (v && v.length >= 4) || "Task name must more than 4 characters",
+    ],
+    taskdetailsrules: [
+      (v) => !!v || "Task Description is required",
+      (v) =>
+        (v && v.length >= 5) || "Description must be more than 5 characters",
+    ],
   }),
   methods: {
+    addNewTask() {
+      try {
+        let title = this.taskname;
+        let desc = this.taskdetails;
+        let date = new Date();
+        let task = {
+          title: title.toString(),
+          description: desc.toString(),
+          time: date,
+          status: "created",
+        };
+        this.datastore.saveTask(task);
+        this.datastore.getAllTasks();
+        this.close();
+      } catch (error) {
+        this.status = `Failed to add
+          ${this.taskname}: ${error}`;
+      }
+    },
+    validate() {
+      this.$refs.form.validate();
+    },
     convertdate(timestap) {
       var date = new Date(timestap);
       var dd = date.toLocaleDateString("en-US");
@@ -293,7 +380,6 @@ export default {
     deleteItem() {
       this.xdialog = false;
       this.datastore.deleteTask(this.selectedItem);
-      // this.datastore.getAllTasks();
     },
     showDialog(item) {
       this.selectedItem = item;
@@ -301,7 +387,6 @@ export default {
     },
     changeStatus(item, newStat) {
       this.datastore.modifyStatus(item, newStat);
-      // this.datastore.getAllTasks();
     },
     withoutQuotes(str) {
       return str.replaceAll('"', "");
@@ -358,11 +443,22 @@ export default {
       this.gtasks = [...this.datastore.allTasksList];
       this.isLoading = false;
     }, 200);
-    this.$watch(
-      () => {
-        return [...this.datastore.allTasksList];
-      },
-      (newVal, preVal) => {
+  },
+  mounted() {
+    if (this.gtasks.length == 0 || null || undefined) {
+      this.newTaskCard = true;
+    } else {
+      this.newTaskCard = false;
+    }
+  },
+  computed: {
+    getTasksStat() {
+      return this.datastore.allTasksList;
+    },
+  },
+  watch: {
+    getTasksStat: {
+      handler(newVal, oldVal) {
         if (newVal == undefined || null) {
           this.isLoading = true;
           setTimeout(() => {
@@ -377,8 +473,22 @@ export default {
           }, 200);
         }
       },
-      { immediate: true, deep: false }
-    );
+      immediate: true,
+      deep: false,
+    },
+    gtasks: {
+      handler(newval, oldval) {
+        if (newval == undefined || null) {
+          this.newTaskCard = true;
+        } else if (newval.length == 0) {
+          this.newTaskCard = true;
+        } else {
+          this.newTaskCard = false;
+        }
+      },
+      deep: false,
+      immediate: true,
+    },
   },
 };
 </script>
@@ -432,5 +542,12 @@ export default {
   bottom: 50%;
   left: 50%;
   align-self: center;
+}
+.dateTimeSty {
+  width: fit-content;
+  background-color: #ffffff;
+  padding: 10px 15px 10px 15px !important;
+  border: 1px solid !important;
+  border-radius: 10px;
 }
 </style>

@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import { createPinia } from "pinia";
-import { loadFonts } from "./plugins/webfontloader";
+// import { loadFonts } from "./plugins/webfontloader";
 import "./style.css";
 import { createRouter, createWebHashHistory } from "vue-router";
 import homeView from "./views/HomeView.vue";
@@ -58,7 +58,7 @@ const router = createRouter({
 
 const pinia = createPinia();
 
-loadFonts();
+// loadFonts();
 
 const app = createApp(App);
 

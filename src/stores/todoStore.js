@@ -32,10 +32,17 @@ export const useTodoStore = defineStore("todoStore", {
     },
   },
   actions: {
+    updateLists() {
+      this.getAllTasks();
+      this.getCreatedTasks();
+      this.getInprogressTasks();
+      this.getFinishedTasks();
+      this.getDeletedTasks();
+    },
     async deleteTask(task) {
       try {
         await db.todoTasks.where("id").equals(task.id).delete();
-        this.getAllTasks();
+        this.updateLists();
       } catch (error) {
         console.log(error);
       }
@@ -44,7 +51,11 @@ export const useTodoStore = defineStore("todoStore", {
       try {
         this.allTasksList = [];
         await db.todoTasks.toArray().then((result) => {
-          this.allTasksList = result;
+          if (result != undefined || null) {
+            this.allTasksList = result;
+          } else {
+            this.allTasksList = [];
+          }
         });
       } catch (e) {
         console.log(e);
@@ -52,14 +63,22 @@ export const useTodoStore = defineStore("todoStore", {
     },
 
     async getCreatedTasks() {
-      this.createdList = [];
-      await db.todoTasks
-        .where("status")
-        .equals("created")
-        .toArray()
-        .then((result) => {
-          this.createdList = result;
-        });
+      try {
+        this.createdList = [];
+        await db.todoTasks
+          .where("status")
+          .equals("created")
+          .toArray()
+          .then((result) => {
+            if (result != undefined || null) {
+              this.createdList = result;
+            } else {
+              this.createdList = [];
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
     },
     async getInprogressTasks() {
       this.inprogessList = [];
@@ -97,7 +116,7 @@ export const useTodoStore = defineStore("todoStore", {
           .where("id")
           .equals(task.id)
           .modify({ status: newStatus });
-        this.getAllTasks();
+        this.updateLists();
       } catch (error) {
         console.log(error);
       }
@@ -110,7 +129,7 @@ export const useTodoStore = defineStore("todoStore", {
           time: task.time,
           status: task.status,
         });
-        this.getAllTasks();
+        this.updateLists();
       } catch (error) {
         console.log(error);
       }

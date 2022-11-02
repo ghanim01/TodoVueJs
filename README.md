@@ -1,4 +1,4 @@
-# To Do Vue Js (Single Page Application)
+# To Do Vue Js (SPA)
 
 ![Logo](https://ik.imagekit.io/ghanim01/To_DO_App/maxresdefault_PpLPCtN6o.png?ik-sdk-version=javascript-1.4.3&updatedAt=1667322895757)
 
