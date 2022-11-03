@@ -254,7 +254,7 @@
       indeterminate
     ></v-progress-circular> -->
     </div>
-    <div ref="addTaskCard" v-show="newTaskCard">
+    <div ref="addTaskCard" :class="viewClass">
       <v-card
         variant="elevated"
         density="comfortable"
@@ -310,7 +310,6 @@
   </div>
 </template>
 <script>
-import { handleError, onMounted } from "vue";
 import { useTodoStore } from "../stores/todoStore";
 import { useDisplay } from "vuetify";
 import createdBg from "../assets/todoBg.svg";
@@ -325,6 +324,9 @@ export default {
   },
   name: "todoComponent",
   data: () => ({
+    viewClass: {
+      hide: true,
+    },
     date: null,
     valid: true,
     xdialog: false,
@@ -445,11 +447,13 @@ export default {
     }, 200);
   },
   mounted() {
-    if (this.gtasks.length == 0 || null || undefined) {
-      this.newTaskCard = true;
-    } else {
-      this.newTaskCard = false;
-    }
+    setTimeout(() => {
+      if (this.gtasks.length == 0 || null || undefined) {
+        this.viewClass.hide = false;
+      } else {
+        this.viewClass.hide = true;
+      }
+    }, 500);
   },
   computed: {
     getTasksStat() {
@@ -478,13 +482,15 @@ export default {
     },
     gtasks: {
       handler(newval, oldval) {
-        if (newval == undefined || null) {
-          this.newTaskCard = true;
-        } else if (newval.length == 0) {
-          this.newTaskCard = true;
-        } else {
-          this.newTaskCard = false;
-        }
+        setTimeout(() => {
+          if (newval == undefined || null) {
+            this.viewClass.hide = false;
+          } else if (newval.length == 0) {
+            this.viewClass.hide = false;
+          } else {
+            this.viewClass.hide = true;
+          }
+        }, 500);
       },
       deep: false,
       immediate: true,
@@ -527,7 +533,7 @@ export default {
   left: 0;
   top: 0;
   z-index: 999;
-  background-color: #0000002c;
+  background-color: #ffffff;
   background-size: cover;
   height: 100%;
   width: 100%;
@@ -549,5 +555,8 @@ export default {
   padding: 10px 15px 10px 15px !important;
   border: 1px solid !important;
   border-radius: 10px;
+}
+.hide {
+  display: none;
 }
 </style>
